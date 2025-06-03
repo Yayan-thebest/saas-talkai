@@ -20,10 +20,10 @@ url
 localhost:3000?search=hello&pageSize=10
 → Tu peux empêcher la modification de pageSize.
  */
-export const fitlerSearchParams = {
+export const filterSearchParams = {
     search: parseAsString.withDefault("").withOptions({clearOnDefault: true}),
     page: parseAsInteger.withDefault(DEFAULT_PAGE).withOptions({clearOnDefault: true}),
 };
 
-export const loadSearchParams = createLoader(fitlerSearchParams)
+export const loadSearchParams = createLoader(filterSearchParams)
 
