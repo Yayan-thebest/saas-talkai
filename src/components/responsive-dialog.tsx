@@ -10,7 +10,7 @@ import {
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface ResponsiveDilogProps {
+interface ResponsiveDialogProps {
     title: string;
     description: string;
     children: React.ReactNode;
@@ -24,7 +24,7 @@ export const ResponsiveDialog = ({
     children,
     open,
     onOpenChange,
-}: ResponsiveDilogProps) => {
+}: ResponsiveDialogProps) => {
     const isMobile = useIsMobile();
 
     if(isMobile){
