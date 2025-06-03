@@ -28,7 +28,7 @@ export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) =
             // pour afficher la BD mis à jour
            onSuccess: async () => {
             await queryClient.invalidateQueries(
-                trpc.agents.getMany.queryOptions(),
+                trpc.agents.getMany.queryOptions({}),
             );
 
             if(initialValues?.id){
