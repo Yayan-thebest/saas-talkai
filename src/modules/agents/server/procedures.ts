@@ -5,6 +5,7 @@ import { agentsInsertSchema } from "../schema";
 import z from "zod";
 import { and, count, desc, eq, getTableColumns, ilike, sql, } from "drizzle-orm";
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@/constants";
+import { TRPCError } from "@trpc/server";
 
 
 /**
@@ -14,7 +15,9 @@ import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@
 export const agentsRouter = createTRPCRouter({
     // si une page n'a pas l'option de,login(par oublie) et qu'un user se rend sur la page via lien
     // protectedProcedure permet de proteger l'API et la page. il ne peut rien creer 
-    getOne: protectedProcedure.input(z.object({id: z.string()})).query(async ({input,}) => {
+    getOne: protectedProcedure
+        .input(z.object({id: z.string()}))
+        .query(async ({input, ctx}) => {
         const [existingAgent] = await db
             .select({
                 // TODO: change to actual count
@@ -22,13 +25,24 @@ export const agentsRouter = createTRPCRouter({
                 ...getTableColumns(agents),
             })
             .from(agents)
-            .where(eq(agents.id, input.id));
+            .where(
+                and(
+                    eq(agents.id, input.id),
+                    eq(agents.userId, ctx.auth.user.id),
+                )
+            );
+
+        if(!existingAgent) {
+            throw new TRPCError({code: "NOT_FOUND", message: "Agent not found"})
+        }
         
         return existingAgent;
     }),
     getMany: protectedProcedure
         .input(z.object({
-            page: z.number().default(DEFAULT_PAGE),
+            //page: z.number().default(DEFAULT_PAGE),
+            // Suggestion code rabbit
+            page: z.number().min(1).default(DEFAULT_PAGE),
             pageSize: z.number().min(MIN_PAGE_SIZE).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
             search: z.string().nullish()
         }))

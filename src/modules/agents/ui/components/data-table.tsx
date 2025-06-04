@@ -30,7 +30,8 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
+  
 
   return (
     <div className="rounded-lg border bg-background overflow-hidden">
