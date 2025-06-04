@@ -44,7 +44,7 @@ export const AgentsViewLoading = () => {
     return(
         <LoadingState
             title="Loading agents"
-            description="This make take a few seconds..."
+            description="This may take a few seconds..."
         />
     )
 };
