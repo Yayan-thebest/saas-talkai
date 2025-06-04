@@ -5,6 +5,7 @@ import { and, count, desc, eq, getTableColumns, ilike, sql, } from "drizzle-orm"
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@/constants";
 import { TRPCError } from "@trpc/server";
 import { meetings } from "@/db/schema";
+import { meetingsInsertSchema, meetingsUpdateSchema } from "../schema";
 
 
 /**
@@ -12,6 +13,45 @@ import { meetings } from "@/db/schema";
  * avec des protections et validations selon les cas.
  */
 export const meetingsRouter = createTRPCRouter({
+
+    update: protectedProcedure
+        .input(meetingsUpdateSchema)
+        .mutation(async ({ctx, input}) => {
+            const [updatedMeeting] = await db
+                .update(meetings)
+                .set(input)
+                .where(
+                    and(
+                        eq(meetings.id, input.id),
+                        eq(meetings.userId, ctx.auth.user.id)
+                    )
+                )
+                .returning();
+
+            if(!updatedMeeting){
+                throw new TRPCError({code: "NOT_FOUND", message: "Meeting not found"})
+            }  
+            
+            return updatedMeeting;
+        }),    
+    /**
+     * protectedProcedure: to verify if user is login
+     * agentsInsertSchem: to verifiy if all field is complete
+     */
+    create: protectedProcedure
+    .input(meetingsInsertSchema) 
+    .mutation(async ({input, ctx}) => {
+    const [createdMeeting] = await db
+        .insert(meetings)
+        .values({...input, userId: ctx.auth.user.id})
+        .returning();
+
+        // TODO: create stream call, upsert stream users
+        
+
+    return createdMeeting;
+
+    }),  
     // si une page n'a pas l'option de,login(par oublie) et qu'un user se rend sur la page via lien
     // protectedProcedure permet de proteger l'API et la page. il ne peut rien creer 
 
