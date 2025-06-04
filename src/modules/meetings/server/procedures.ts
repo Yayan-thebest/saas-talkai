@@ -4,7 +4,7 @@ import z from "zod";
 import { and, count, desc, eq, getTableColumns, ilike, sql, } from "drizzle-orm";
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, MIN_PAGE_SIZE } from "@/constants";
 import { TRPCError } from "@trpc/server";
-import { meetings } from "@/db/schema";
+import { agents, meetings } from "@/db/schema";
 import { meetingsInsertSchema, meetingsUpdateSchema } from "../schema";
 
 
@@ -88,13 +88,15 @@ export const meetingsRouter = createTRPCRouter({
         }))
         .query(async ({ctx, input}) => {
             const { search, page, pageSize } = input;
+
             const data = await db
                 .select({
-                    // TODO: change to actual count
-                    meetingCount: sql<number>`5`,
                     ...getTableColumns(meetings),
+                    agent: agents,
+                    duration: sql<number>`EXTRACT(EPOCH FROM(ended_at - started_at))`.as("duration"),
                 })
                 .from(meetings)
+                .innerJoin(agents, eq(meetings.agentId, agents.id))
                 .where(
                     and(
                         eq(meetings.userId, ctx.auth.user.id),
@@ -105,7 +107,10 @@ export const meetingsRouter = createTRPCRouter({
                 .limit(pageSize)
                 .offset((page -1) * pageSize)
 
-                const [total] = await db.select({count: count()}).from(meetings)
+                const [total] = await db
+                    .select({count: count()})
+                    .from(meetings)
+                    .innerJoin(agents, eq(meetings.agentId, agents.id))
                     .where(
                         and(
                             eq(meetings.userId, ctx.auth.user.id),
@@ -115,11 +120,11 @@ export const meetingsRouter = createTRPCRouter({
 
                     const totalPages = Math.ceil(total.count / pageSize);
 
-                    return {
-                        items: data,
-                        total: total.count,
-                        totalPages,
-                    }
+            return {
+                items: data,
+                total: total.count,
+                totalPages,
+            }
     }),
     
 })
