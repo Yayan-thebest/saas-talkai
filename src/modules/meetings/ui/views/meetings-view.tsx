@@ -10,10 +10,8 @@ export const MeetingsView = () =>  {
     const {data} = useSuspenseQuery(trpc.meetings.getMany.queryOptions({}));
 
     return (
-        <div>
-            {
-                JSON.stringify(data)
-            }
+        <div className="overflow-x-auto">
+           TODO: data table
         </div>
     )
 }
@@ -21,7 +19,7 @@ export const MeetingsView = () =>  {
 export const MeetingsViewLoading = () => {
     return(
         <LoadingState
-            title="Loading agents"
+            title="Loading Meetings"
             description="This may take a few seconds..."
         />
     )
@@ -30,7 +28,7 @@ export const MeetingsViewLoading = () => {
 export const MeetingsViewError = () => {
     return(
         <ErrorState
-            title="Error Loading Agents"
+            title="Error Loading Meetings"
             description="Please try again later"
         />
     )
