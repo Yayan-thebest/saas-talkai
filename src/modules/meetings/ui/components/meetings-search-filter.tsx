@@ -1,15 +1,15 @@
 import { Input } from "@/components/ui/input";
-import { useAgentsFilters } from "../../hooks/use-agents-filters"
 import { SearchIcon } from "lucide-react";
+import { useMeetingsFilters } from "../../hooks/use-meetings-filters";
 
 
-export const AgentsSearchFilter = () => {
-    const [filters, setFilters] = useAgentsFilters();
+export const MeetingsSearchFilter = () => {
+    const [filters, setFilters] = useMeetingsFilters();
 
     return (
         <div className="relative">
             <Input
-                placeholder="FIlter by name"
+                placeholder="Filter by name"
                 className="h-9 bg-white w-[200px] pl-7"
                 value={filters.search}
                 onChange={(e) => setFilters({search: e.target.value})}

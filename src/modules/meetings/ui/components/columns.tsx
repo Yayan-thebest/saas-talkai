@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { GeneratedAvatar } from "@/components/generated-avatar"
 import { CircleCheckIcon, CircleXIcon, ClockArrowUpIcon, ClockFadingIcon, CornerDownRightIcon, LoaderIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { MeetingGetMany } from "../../type"
+import { MeetingGetMany } from "../../types"
 import humanizeDuration from "humanize-duration";
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
