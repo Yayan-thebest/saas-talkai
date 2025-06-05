@@ -7,7 +7,7 @@ import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, Form
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { MeetingGetOne } from "../../type";
+import { MeetingGetOne } from "../../types";
 import { meetingsInsertSchema } from "../../schema";
 import { useState } from "react";
 import { CommandSelect } from "@/components/command-select";

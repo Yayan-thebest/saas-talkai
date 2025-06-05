@@ -6,14 +6,14 @@ import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { columns, } from "../components/columns";
 import { EmptyState } from "@/components/empty-state";
-import { useAgentFilters } from "../../hooks/use-agents-filters";
+import { useAgentsFilters } from "../../hooks/use-agents-filters";
 import { DataPagination } from "../components/data-pagination";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/data-table";
 
 export const AgentsView = () => {
     const router = useRouter();
-    const [filters, setFilters] = useAgentFilters();
+    const [filters, setFilters] = useAgentsFilters();
     const trpc = useTRPC();
     // useSuspenseQuery is much quicker
     // but to use it need to make sure that in the parent server component page.tsx
