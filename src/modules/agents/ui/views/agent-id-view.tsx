@@ -24,7 +24,7 @@ export const AgentIdView = ({agentId}: Props) => {
     const trpc = useTRPC();
     const {data} = useSuspenseQuery(trpc.agents.getOne.queryOptions({id: agentId}));
 
-    const [updateAgentDialopOpen, setUpdateAgentDialopOpen] = useState(false);
+    const [updateAgentDialogOpen, setUpdateAgentDialogOpen] = useState(false);
 
     const removeAgent = useMutation(
         trpc.agents.remove.mutationOptions({
@@ -55,15 +55,15 @@ export const AgentIdView = ({agentId}: Props) => {
         <>
             <RemoveConfirmation/>
             <UpdateAgentDialog
-                open={updateAgentDialopOpen}
-                onOpenChange={setUpdateAgentDialopOpen}
+                open={updateAgentDialogOpen}
+                onOpenChange={setUpdateAgentDialogOpen}
                 initialValues={data}
             />
             <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-4">
                 <AgentIdViewHeader
                     agentId={agentId}
                     agentName={data.name}
-                    onEdit={() => setUpdateAgentDialopOpen(true)}
+                    onEdit={() => setUpdateAgentDialogOpen(true)}
                     onRemove={handleRemoveAgent}
                 />
                 <div className="bg-white rounded-lg border">
