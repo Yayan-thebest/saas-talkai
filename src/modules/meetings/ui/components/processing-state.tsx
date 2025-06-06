@@ -9,7 +9,7 @@ const ProcessingState = () => {
       <EmptyState
         image="/processing.svg"
         title="Meeting is Processing"
-        description='This meeting was commpleted, a summary will appear soon'
+        description='This meeting was completed, a summary will appear soon'
       />
       
     </div>
