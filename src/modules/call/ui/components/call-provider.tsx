@@ -8,10 +8,10 @@ import { generateAvatarUri } from '@/lib/avatar';
 
 interface Props {
     meetingId: string;
-    meentingName: string;
+    meetingName: string;
 }
 
-export const CallProvider = ({meetingId, meentingName}: Props) => {
+export const CallProvider = ({meetingId, meetingName}: Props) => {
 
     const { data, isPending } = authClient.useSession();
 
@@ -28,7 +28,7 @@ export const CallProvider = ({meetingId, meentingName}: Props) => {
     <div>
         <CallConnect 
             meetingId={meetingId} 
-            meetingName={meentingName} 
+            meetingName={meetingName} 
             userId={data.user.id} 
             userName={data.user.name} 
             userImage={data.user.image ?? generateAvatarUri({ seed: data.user.name, variant: "initials" })}            

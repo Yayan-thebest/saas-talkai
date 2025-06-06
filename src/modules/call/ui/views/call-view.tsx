@@ -23,6 +23,6 @@ export const CallView = ({meetingId}: Props) => {
         )
     }
     return (
-       <CallProvider meetingId={meetingId} meentingName={data.name}/>
+       <CallProvider meetingId={meetingId} meetingName={data.name}/>
     )
 }
