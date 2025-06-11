@@ -117,7 +117,7 @@ export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) =
                         <FormItem>
                             <FormLabel>Instructions</FormLabel>
                             <FormControl>
-                                <Textarea {...field} placeholder="You aere helpful math assistant that can answer questions and help with assignments"/>
+                                <Textarea {...field} placeholder="You are helpful math assistant that can answer questions and help with assignments"/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>

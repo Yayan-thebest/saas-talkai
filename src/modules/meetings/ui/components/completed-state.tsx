@@ -8,6 +8,8 @@ import { GeneratedAvatar } from "@/components/generated-avatar";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { formatDuration } from "@/lib/utils";
+import { Transcript } from "./transcript";
+import { ChatProvider } from "./chat-provider";
 
 interface Props {
     data: MeetingGetOne
@@ -17,7 +19,7 @@ export const CompletedState = ({data}: Props) => {
     return (
         <div className="flex flex-col gap-y-4">
             <Tabs defaultValue="summary">
-                <div className="bg-white roudnded-lg border px-3">
+                <div className="bg-white rounded-lg border px-3">
                     <ScrollArea>
                         <TabsList className="p-0 bg-background justify-start rounded-none h-13">
                             <TabsTrigger 
@@ -28,7 +30,7 @@ export const CompletedState = ({data}: Props) => {
                                 <BookOpenTextIcon/> Summary
                             </TabsTrigger>
                             <TabsTrigger 
-                                value="trasncript"
+                                value="transcript"
                                 className="text-muted-foreground rounded-none bg-background data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-b-primary
                                 data-[state=active]:text-accent-foreground h-full hover:text-accent-foreground"
                             >
@@ -54,6 +56,13 @@ export const CompletedState = ({data}: Props) => {
                     </ScrollArea>
                 </div>
 
+                <TabsContent value="transcript">
+                    <Transcript meetingId={data.id}/>
+                </TabsContent> 
+                <TabsContent value="chat">
+                    <ChatProvider meetingId={data.id} meetingName={data.name}/>
+                </TabsContent>    
+
                  {/** Streamvideo store video for only 2 weeks. check the stream doc to sotre is on aws */}
                 <TabsContent value="recording" >
                     <div className="bg-white rounded-lg border px-4 py-5">
@@ -65,7 +74,7 @@ export const CompletedState = ({data}: Props) => {
                     </div>
                 </TabsContent>
                 <TabsContent value="summary">
-                    <div className="bg-white roundeed-lg border">
+                    <div className="bg-white rounded-lg border">
                         <div className="px-4 py-5 gap-y-5 flex flex-col col-span-5">
                             <h2 className="text-2xl font-medium capitalize">{data.name}</h2>
                             <div className="flex gap-x-2 items-center">
