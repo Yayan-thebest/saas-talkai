@@ -42,7 +42,7 @@ export const meetingProcessing = inngest.createFunction(
         return fetch(event.data.transcriptUrl).then((res) => res.text())
        });
        
-       /* LOCAL
+       /* LOCAL - dev mode
         const transcript = await step.run("parse-transcript", async () => {
             const text = await response.text();
             return JSONL.parse(text);
