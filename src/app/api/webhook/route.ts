@@ -106,14 +106,18 @@ export async function POST(req: NextRequest) {
             agentUserId: existingAgent.id,
         });
 
-        realTimeClient.updateSession({
+       /* realTimeClient.updateSession({
             instructions: existingAgent.instructions
-        }); 
+        }); */
 
         // TODO: add AI agent instructions
         // Set detailed instructions for the AI agent
         realTimeClient.updateSession({
-        instructions: `You are a friendly customer support agent named ${existingAgent.name}. Start every call by greeting the user and introducing yourself`,
+        instructions:  `
+    You are a friendly customer support agent named ${existingAgent.name}.
+    Start every call by greeting the user and introducing yourself.
+    ${existingAgent.instructions ?? ""}
+  `,
         });
     } else if (eventType === "call.session_participant_left") {
         const event = payload as CallSessionParticipantLeftEvent;
