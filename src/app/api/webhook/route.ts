@@ -109,6 +109,12 @@ export async function POST(req: NextRequest) {
         realTimeClient.updateSession({
             instructions: existingAgent.instructions
         }); 
+
+        // TODO: add AI agent instructions
+        // Set detailed instructions for the AI agent
+        realTimeClient.updateSession({
+        instructions: `You are a friendly customer support agent named ${existingAgent.name}. Start every call by greeting the user and introducing yourself`,
+        });
     } else if (eventType === "call.session_participant_left") {
         const event = payload as CallSessionParticipantLeftEvent;
         const meetingId = event.call_cid.split(":")[1]; // caal_cid is formatted as "type:id"
