@@ -4,7 +4,6 @@ import { ErrorState } from "@/components/error-state";
 import { LoadingState } from "@/components/loading-state";
 import { authClient } from "@/lib/auth-client";
 import { useTRPC } from "@/trpc/client";
-import { trpc } from "@/trpc/server";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { PricingCard } from "../components/pricing-card";
 
