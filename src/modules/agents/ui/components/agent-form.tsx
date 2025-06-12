@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface AgentFormProps {
     onSuccess?: () => void;
@@ -21,6 +22,7 @@ interface AgentFormProps {
 export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) => {
     const trpc = useTRPC();
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     const createAgent = useMutation(
         trpc.agents.create.mutationOptions({
@@ -30,16 +32,21 @@ export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) =
             await queryClient.invalidateQueries(
                 trpc.agents.getMany.queryOptions({}),
             );
-
-            // TODO: invalidate free tier usage
+            // invalidate the free usage query to update the free usage count
+            await queryClient.invalidateQueries(
+                trpc.premium.getFreeUsage.queryOptions(),
+            );
 
             onSuccess?.();
 
            },
            onError: (error) => {
             toast.error(error.message);
-            // TODO: check if error code is "FORBIDDEN", redirect to upgrade
-            
+
+            if(error.data?.code === "FORBIDDEN") {
+                // Redirect to upgrade page or show a message
+                 router.push("/upgrade");
+            }
            },
         })
     );
@@ -63,9 +70,7 @@ export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) =
 
            },
            onError: (error) => {
-            toast.error(error.message);
-            // TODO: check if error code is "FORBIDDEN", redirect to upgrade
-            
+            toast.error(error.message);            
            },
         })
     );    

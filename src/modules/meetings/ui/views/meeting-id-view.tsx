@@ -36,7 +36,12 @@ export const MeetingIdView = ({meetingId}: Props) => {
         trpc.meetings.remove.mutationOptions({
             onSuccess: async () => {
                await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
-               // TODO: invalidate free tier usage
+               
+                // invalidate the free usage query to update the free usage count
+                await queryClient.invalidateQueries(
+                    trpc.premium.getFreeUsage.queryOptions(),
+                );  
+                             
                router.push("/meetings")
             },
             onError: (error) => {

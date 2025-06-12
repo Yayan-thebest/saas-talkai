@@ -13,6 +13,7 @@ import { useState } from "react";
 import { CommandSelect } from "@/components/command-select";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
+import { useRouter } from "next/navigation";
 
 interface MeetingFormProps {
     onSuccess?: (id?: string) => void;
@@ -23,6 +24,7 @@ interface MeetingFormProps {
 export const MeetingForm =({onSuccess, onCancel, initialValues}: MeetingFormProps) => {
     const trpc = useTRPC();
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     const [openNewAgentDialog, setOpenNewAgentDialog] = useState(false);
     const [agentSearch, setAgentSearch] = useState("");
@@ -42,15 +44,21 @@ export const MeetingForm =({onSuccess, onCancel, initialValues}: MeetingFormProp
                 trpc.meetings.getMany.queryOptions({}),
             );
 
-            // TODO: invalidate free tier usage
+            // invalidate the free usage query to update the free usage count
+            await queryClient.invalidateQueries(
+                trpc.premium.getFreeUsage.queryOptions(),
+            );
 
             onSuccess?.(data.id);
 
            },
            onError: (error) => {
-            toast.error(error.message);
-            // TODO: check if error code is "FORBIDDEN", redirect to upgrade
-            
+                toast.error(error.message);
+
+                if(error.data?.code === "FORBIDDEN") {
+                    // Redirect to upgrade page or show a message
+                    router.push("/upgrade");
+                }
            },
         })
     );
@@ -74,9 +82,7 @@ export const MeetingForm =({onSuccess, onCancel, initialValues}: MeetingFormProp
 
            },
            onError: (error) => {
-            toast.error(error.message);
-            // TODO: check if error code is "FORBIDDEN", redirect to upgrade
-            
+            toast.error(error.message);            
            },
         })
     );    
