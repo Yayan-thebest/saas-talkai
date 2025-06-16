@@ -128,6 +128,7 @@ export const AgentForm =({onSuccess, onCancel, initialValues}: AgentFormProps) =
                         </FormItem>
                     )}
                 />
+                
                 <div className=" flex justify-between gap-x-2">
                     {onCancel && (
                         <Button variant="ghost" disabled={isPending} type="button" onClick={() => onCancel()}>
